@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no, viewport-fit=cover" />
+    <title>vue移动端表格吸顶、列自适应高度、列左侧固定悬浮</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        /* 页面所需样式 */
+        html,
+        body,
+        #app {
+            width: 100%;
+        }
+
+        .cardBox {
+            border-radius: 8px;
+        }
+
+        .tableBox {
+            border: 1px solid #EBECF0;
+            border-radius: 4px;
+            color: #494949;
+        }
+
+        .right {
+            overflow-x: auto;
+        }
+
+        .tableHead {
+            background: #E8EDFF;
+            height: 32px;
+            line-height: 32px;
+        }
+
+        .borderBottom {
+            border-bottom: 1px solid #EBECF0;
+        }
+
+        .width100 {
+            width: 100px;
+        }
+
+        .width70 {
+            width: 70px;
+        }
+
+        .width40 {
+            width: 40px;
+        }
+
+        .colorff {
+            color: #ff0000;
+        }
+
+        .color00 {
+            color: #00d7a2;
+        }
+
+        .fw500 {
+            font-weight: 500
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            transition: all 0.1s;
+        }
+
+        .icon-active {
+            width: 20px;
+            height: 20px;
+            color: yellow;
+            transform: rotate(180deg);
+            transition: all 0.1s;
+        }
+    </style>
+</head>
+
+<body style="background: #eee;">
+    <div id="app" class="pt10">
+        <div class="cardBox pl10 pr10 pt15 pb15 borBox bgf ml12 mr12 mb12 fz16">
+
+            <div class="fz14 fw color3 pmps mb12 ml12">vue移动端表格吸顶、<br />列自适应高度、<br />列左侧固定悬浮</div>
+            <!-- 浮动头部 start -->
+            <div class="tableBox flex w100" style="position: sticky;top:0px;z-index:5;border-radius: 4px 4px 0 0;">
+                <!-- 左侧固定列 -->
+                <div class="fz12 lh20 flex">
+                    <div class="tl fw pmps tableHead pl10 borBox pr10" style="max-width:140px">游戏类型</div>
+                    <div class="fw pmps tableHead borBox pr10 tl" style="width:80px">姓氏名谁</div>
+                    <div class="fw pmps tableHead borBox pr10 tl" style="width:75px">中级技能</div>
+                </div>
+                <!-- 右侧滚动区域 -->
+                <div class="txtno right flex1" @scroll="divScroll" ref="rightBoxHead">
+                    <div class="flex fz12 pmps tr fw" style="width:max-content">
+                        <div class="tableHead width40" style="line-height:15px;">指标<br />环比</div>
+                        <div class="tableHead width70">日<span class="fz12 color6 fbf">（千）</span></div>
+                        <div class="tableHead width70">日环</div>
+                        <div class="tableHead width70">月<span class="fz12 color6 fbf">（千）</span></div>
+                        <div class="tableHead width70">月环</div>
+                        <div class="tableHead width70">年<span class="fz12 color6 fbf">（千）</span></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 浮动头部 end -->
+            <div class="tableBox flex w100" style="border-radius: 0 0 4px 4px;">
+                <!-- 左侧固定列 -->
+                <div class="fz12 lh20 flex">
+                    <div>
+                        <div v-for="(item ,i) in typeList" :key="i" :style="{height:item.height}"
+                            style="max-width:140px" class="prps pl10 borBox pr10 pt5 pb5"
+                            :class="{borderBottom:i != typeList.length - 1}">{{item.businessPart}}</div>
+                    </div>
+                    <div>
+                        <!-- 姓氏名谁 默认只有此列数据可能换行，其他列数据固定 -->
+                        <!-- :ref="'leftRef'+i"和:style="{height:item.height}" 用来计算可能存在得换行数据高度/动态赋值 -->
+                        <div v-for="(item ,i) in typeList" :key="i" :style="{height:item.height}" :ref="'leftRef'+i"
+                            style="width:80px" class="prps borBox pt5 pb5 tl"
+                            :class="{borderBottom:i != typeList.length - 1}">{{item.businessLine}}</div>
+                    </div>
+                    <div>
+                        <div v-for="(item ,i) in typeList" :key="i" :style="{height:item.height}" style="width:75px"
+                            class="prps borBox pt5 pb5 tl" :class="{borderBottom:i != typeList.length - 1}">
+                            {{item.childBusiness}}</div>
+                    </div>
+                </div>
+                <!-- 右侧滚动区域 -->
+                <div class="txtno right flex1" @scroll="divScroll" ref="rightBoxContent">
+                    <div class="flex fz14 pmps tr fw lh20" v-for="(item ,i) in typeList" :key="i"
+                        :style="{height:item.height}" style="width:max-content">
+                        <div class="width40 pt5 pb5 borBox" :style="{height:item.height}"
+                            :class="[i == typeList.length - 1?'':'borderBottom']">
+                            <span v-if="parseFloat(item.indicatorRate)"
+                                :class="[parseFloat(item.indicatorRate) > 0? 'colorff':'color00']">{{item.indicatorRate}}</span>
+                            <span v-else>0</span>
+                        </div>
+                        <div class="width70 pt5 pb5 borBox" :style="{height:item.height}"
+                            :class="{borderBottom:i != typeList.length - 1}">{{item.dayValue}}</div>
+                        <div class="width70 pt5 pb5 borBox" :style="{height:item.height}"
+                            :class="[i == typeList.length - 1?'':'borderBottom']">
+                            <span v-if="parseFloat(item.dayRate)"
+                                :class="[parseFloat(item.dayRate) > 0? 'colorff':'color00']">{{item.dayRate}}</span>
+                            <span v-else>0</span>
+                        </div>
+                        <div class="width70 pt5 pb5 borBox" :style="{height:item.height}"
+                            :class="{borderBottom:i != typeList.length - 1}">{{item.monthValue}}</div>
+                        <div class="width70 pt5 pb5 borBox" :style="{height:item.height}"
+                            :class="[i == typeList.length - 1?'':'borderBottom']">
+                            <span v-if="parseFloat(item.monthRate)"
+                                :class="[parseFloat(item.monthRate) > 0? 'colorff':'color00']">{{item.monthRate}}</span>
+                            <span v-else>0</span>
+                        </div>
+                        <div class="width70 pt5 pb5 borBox" :style="{height:item.height}"
+                            :class="{borderBottom:i != typeList.length - 1}">{{item.yearValue}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="w100 pt5 flex justc alic" v-if='typeList.length != 0' @click="showMore">
+                <span class="fz12 color6 lh20">{{isActiveMore?'收起':'查看更多'}}</span>
+                <img style="pointer-events:auto"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABdklEQVRoQ+2WP2rDMBjFJWzPHQs5QE8QumfJRWywlvYKTa7QLDLYF8mSvfQEPUCgY2bbuAgsCAY51veHYvi82t/T+70nCWu18kev3L8SgP9uUBqQBpAJyBZCBogelwbQESIFpAFkgOhxaQAdIVJAGpgLsKqqD/e+LMsjMujgOFsDo/nDuPKBC4IFYGLep8cCQQ4QMM8GQQrwwDwLBBlAwPxtdP00OYVk24kEIGQ+SZK9M973/VkpxQKBBpgzXxTFlwOo6/qVCwIFsMS83zpcEGCAGPOcECAAiHkuiGgAjHkOiCgAa+2b1vpzciXe3G3jD+zSf57QmRiG4d0Yc1qqEwXQNM2m67qLUuplXABkfqaJnzRNd3meX1kAnOgdxDMk+amxuyZ+Y807ragG/OIOom3bjTHme2lSc99Za7dZll1jkvd6IAAK01QaAkCVJFRHGoAmRzUnDVAlCdWRBqDJUc1JA1RJQnWkAWhyVHPSAFWSUJ3VN/AHyEyuMZ39T8kAAAAASUVORK5CYII="
+                    alt="icon" :class="[isActiveMore?'icon':'icon-active','inline']" />
+            </div>
+            <div class="tl color6 fz12 mt10 ml12">疫情在家三十多天了，好家伙，我想出去玩！</div>
+            <div v-if='typeList.length == 0' class="tc color6 fz14 mt10">暂无数据</div>
+
+        </div>
+    </div>
+</body>
+
+<script src="https://lib.baomitu.com/vue/2.6.14/vue.js"></script>
+<!-- 引入组件库 -->
+<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+<!-- 引入 echart -->
+<!-- <script src="https://lib.baomitu.com/echarts/5.2.0/echarts.common.js"></script> -->
+
+<script>
+    let timer = ''
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                typeAllList: [
+                    {
+                        businessLine: "蛮王",
+                        businessPart: "英雄联盟",
+                        childBusiness: "开大招",
+                        dayRate: "-10.0%",
+                        dayValue: "10.0",
+                        indicatorRate: "0/1",
+                        monthRate: "10.0%",
+                        monthValue: "10.0",
+                        order: 220,
+                        yearValue: "10.0",
+                    },
+                    {
+                        businessLine: "亚索",
+                        businessPart: "英雄联盟",
+                        childBusiness: "疾风剑豪",
+                        dayRate: "10.0%",
+                        dayValue: "220.0",
+                        indicatorRate: "0/1",
+                        monthRate: "10.0%",
+                        monthValue: "330.0",
+                        order: 4440,
+                        yearValue: "20.0",
+                    },
+                    {
+                        businessLine: "EZ说他最帅可以换行",
+                        businessPart: "英雄联盟",
+                        childBusiness: "星传说",
+                        dayRate: "60.0%",
+                        dayValue: "60.0",
+                        indicatorRate: "0/1",
+                        monthRate: "60.0%",
+                        monthValue: "60.0",
+                        order: 660,
+                        yearValue: "60.0",
+                    },
+                ],
+                typeList: [],
+                isActiveMore: false,
+            }
+        },
+        created() {
+            // 初始化数据
+            Array.from({ length: 30 }).map(() => {
+                this.typeAllList.push({
+                    businessLine: "火影忍者",
+                    businessPart: "木叶村",
+                    childBusiness: "影分身",
+                    dayRate: "160.0%",
+                    dayValue: "160.0",
+                    indicatorRate: "0/1",
+                    monthRate: "160.0%",
+                    monthValue: "160.0",
+                    order: 1660,
+                    yearValue: "160.0",
+                })
+            })
+            // 根据激活项，是否展示更多数据，默认展示8条
+            if (this.isActiveMore) {
+                this.typeList = this.typeAllList
+            } else {
+                this.typeList = this.typeAllList.length > 0 ? this.typeAllList.slice(0, 8) : []
+            }
+        },
+        mounted() {
+            // 延迟获取每一行高度
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    this.typeList.map((item, i) => {
+                        this.getHeight(i)//动态读取每一项高度
+                    })
+                    this.typeList = [...this.typeList]
+                })
+            }, 500)
+        },
+        methods: {
+            //展示更多
+            showMore() {
+                this.isActiveMore = !this.isActiveMore
+                if (this.isActiveMore) {
+                    this.typeList = this.typeAllList
+                } else {
+                    this.typeList = this.typeAllList.length > 0 ? this.typeAllList.slice(0, 8) : []
+                }
+                this.$nextTick(() => {
+                    this.typeList.map((item, i) => {
+                        this.getHeight(i)
+                    })
+                    this.typeList = [...this.typeList]
+                })
+            },
+            //滚动条
+            divScroll(event) {
+                if (timer) {
+                    window.clearTimeout(timer)
+                    timer = ''
+                }
+                timer = window.setTimeout(() => {
+                    this.$refs.rightBoxContent.scrollLeft = event.target.scrollLeft
+                    this.$refs.rightBoxHead.scrollLeft = event.target.scrollLeft
+                }, 10)
+            },
+            //动态获取高度
+            getHeight(i) {
+                // console.dir(this.$refs['leftRef2'][0])
+                this.typeList[i].height = this.$refs['leftRef' + i][0].offsetHeight + 'px'
+            }
+        }
+    })
+</script>
+
+<style>
+
+    /* CSS Document 公共样式表*/
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+        word-wrap: break-word;
+    }
+
+    .w50 {
+        width: 50%;
+    }
+
+    .w100 {
+        width: 100%;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        outline: none;
+    }
+
+    .tc {
+        text-align: center
+    }
+
+    .tl {
+        text-align: left;
+    }
+
+    .tr {
+        text-align: right
+    }
+
+    .vm {
+        vertical-align: middle;
+    }
+
+    .fl {
+        float: left;
+    }
+
+    .fr {
+        float: right;
+    }
+
+    .fz26 {
+        font-size: 26px;
+    }
+
+    .fz25 {
+        font-size: 25px;
+    }
+
+    .fz24 {
+        font-size: 24px;
+    }
+
+    .fz22 {
+        font-size: 22px;
+    }
+
+    .fz20 {
+        font-size: 20px;
+    }
+
+    .fz18 {
+        font-size: 18px;
+    }
+
+    .fz16 {
+        font-size: 16px;
+    }
+
+    .fz14 {
+        font-size: 14px;
+    }
+
+    .fz12 {
+        font-size: 12px;
+    }
+
+    .fz11 {
+        font-size: 11px;
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
+        display: inline-block;
+    }
+
+    .fz10 {
+        font-size: 10px;
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        display: inline-block;
+    }
+
+    .fw {
+        font-weight: 600;
+    }
+
+    .fw4 {
+        font-weight: 400;
+    }
+
+    .fwB {
+        font-weight: bold;
+    }
+
+    .mr5 {
+        margin-right: 5px
+    }
+
+    .mr10 {
+        margin-right: 10px
+    }
+
+    .mr12 {
+        margin-right: 12px
+    }
+
+    .mr15 {
+        margin-right: 15px
+    }
+
+    .mr20 {
+        margin-right: 20px
+    }
+
+    .ml5 {
+        margin-left: 5px;
+    }
+
+    .ml10 {
+        margin-left: 10px;
+    }
+
+    .ml12 {
+        margin-left: 12px;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .ml20 {
+        margin-left: 20px;
+    }
+
+    .mt40 {
+        margin-top: 40px;
+    }
+
+    .mt20 {
+        margin-top: 20px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .mt12 {
+        margin-top: 12px;
+    }
+
+    .mt10 {
+        margin-top: 10px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt3 {
+        margin-top: 3px;
+    }
+
+    .mt7 {
+        margin-top: 7px;
+    }
+
+    .mb5 {
+        margin-bottom: 5px;
+    }
+
+    .mb10 {
+        margin-bottom: 10px;
+    }
+
+    .mb12 {
+        margin-bottom: 12px;
+    }
+
+    .mb15 {
+        margin-bottom: 15px;
+    }
+
+    .mb20 {
+        margin-bottom: 20px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pt10 {
+        padding-top: 10px;
+    }
+
+    .pt12 {
+        padding-top: 12px;
+    }
+
+    .pt15 {
+        padding-top: 15px;
+    }
+
+    .pt20 {
+        padding-top: 20px;
+    }
+
+    .pb5 {
+        padding-bottom: 5px;
+    }
+
+    .pb10 {
+        padding-bottom: 10px;
+    }
+
+    .pb12 {
+        padding-bottom: 12px;
+    }
+
+    .pb15 {
+        padding-bottom: 15px;
+    }
+
+    .pb20 {
+        padding-bottom: 20px;
+    }
+
+    .pl5 {
+        padding-left: 5px;
+    }
+
+    .pl10 {
+        padding-left: 10px;
+    }
+
+    .pl12 {
+        padding-left: 12px;
+    }
+
+    .pl15 {
+        padding-left: 15px;
+    }
+
+    .pl20 {
+        padding-left: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .pr10 {
+        padding-right: 10px;
+    }
+
+    .pr12 {
+        padding-right: 12px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .bgf {
+        background: #fff;
+    }
+
+    .bgea {
+        background: #EAEAEA;
+    }
+
+    .bgF3 {
+        background: #5377F3;
+    }
+
+    .bg48 {
+        background: #F2B448;
+    }
+
+    .bgA2 {
+        background: #00D7A2;
+    }
+
+    .bgF4 {
+        background: #FFFBF4;
+    }
+
+    .bgFb {
+        background: #EEFFFB;
+    }
+
+    .bgs {
+        box-shadow: 0px 0px 15px #eee;
+    }
+
+
+    .colorF {
+        color: #fff;
+    }
+
+    .color3 {
+        color: #333;
+    }
+
+    .color6 {
+        color: #666;
+    }
+
+    .color9 {
+        color: #999;
+    }
+
+    .color49 {
+        color: #494949;
+    }
+
+    .color80 {
+        color: #808080;
+    }
+
+    .colorA5 {
+        color: #A5A5A5
+    }
+
+    .colorb {
+        color: blue
+    }
+
+    .colorF3 {
+        color: #5377F3;
+    }
+
+    .color48 {
+        color: #F2B448;
+    }
+
+    .colorA2 {
+        color: #00D7A2;
+    }
+
+    .color00 {
+        color: #FF0000
+    }
+
+    .color26 {
+        color: #FFA926;
+    }
+
+
+    .lh20 {
+        line-height: 20px;
+    }
+
+    .lh22 {
+        line-height: 22px;
+    }
+
+    .lh24 {
+        line-height: 24px;
+    }
+
+    .lh30 {
+        line-height: 30px;
+    }
+
+    .lh36 {
+        line-height: 36px;
+    }
+
+    .lh40 {
+        line-height: 40px;
+    }
+
+    .lh50 {
+        line-height: 50px;
+    }
+
+    .lh60 {
+        line-height: 60px;
+    }
+
+    .hide {
+        display: none
+    }
+
+    .show {
+        display: block
+    }
+
+    .inline {
+        display: inline-block;
+    }
+
+    .indent2 {
+        text-indent: 2em;
+    }
+
+    .txt2 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .txt3 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    .txtno {
+        white-space: nowrap;
+    }
+
+    /*不换行*/
+    .txtsa {
+        text-align: justify;
+        text-align-last: justify;
+    }
+
+    /*文字分散对齐*/
+    .wn {
+        white-space: nowrap;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+    .flex1 {
+        flex: 1;
+    }
+
+    .colu {
+        flex-direction: column;
+    }
+
+    .justc {
+        justify-content: center;
+    }
+
+    .justs {
+        justify-content: space-between
+    }
+
+    /*两端对齐*/
+    .justsa {
+        justify-content: space-around
+    }
+
+    /*分散对齐*/
+    .juste {
+        justify-content: flex-end;
+    }
+
+    .alic {
+        align-items: center
+    }
+
+    .wrap {
+        flex-wrap: wrap
+    }
+
+    .childEnd {
+        align-self: flex-end;
+    }
+
+    .posAbs {
+        position: absolute;
+    }
+
+    .posRel {
+        position: relative;
+    }
+
+    .posFix {
+        position: fixed;
+    }
+
+    .top0 {
+        top: 0;
+    }
+
+    .bottom0 {
+        bottom: 0;
+    }
+
+    .left0 {
+        left: 0;
+    }
+
+    .right0 {
+        right: 0;
+    }
+
+    .w100 {
+        width: 100%
+    }
+
+    .h100 {
+        height: 100%
+    }
+
+    .border0 {
+        border: 0
+    }
+
+    .borBox {
+        box-sizing: border-box;
+    }
+
+    .borderte0 {
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .borderbe0 {
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .borRad {
+        border-radius: 5px;
+    }
+
+    .borRad50 {
+        border-radius: 50%;
+    }
+
+    .over {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .overH {
+        overflow: hidden
+    }
+
+    .overS {
+        overflow: scroll;
+    }
+
+    .clear {
+        zoom: 1;
+    }
+
+    .clear:after {
+        content: "\0020";
+        display: block;
+        height: 0;
+        clear: both;
+    }
+
+    .mask {
+        width: 100%;
+        height: 100%;
+        background: rgba(20, 20, 20, 0.5);
+        position: fixed;
+        z-index: 5;
+        top: 0;
+        left: 0;
+    }
+
+    .cursor {
+        cursor: pointer;
+    }
+
+    .noClick {
+        pointer-events: none;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+        color: #555;
+    }
+
+    a:hover {
+        color: #555;
+    }
+
+    img {
+        display: block;
+        vertical-align: middle;
+    }
+
+    a img,
+    fieldset {
+        border: 0;
+    }
+
+    i,
+    em {
+        font-style: normal
+    }
+
+    input,
+    textarea,
+    select {
+        outline: none;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    [v-cloak] {
+        display: none;
+    }
+
+    /* 公用字体 start */
+    .psps {
+        font-family: PingFangSC-Semibold, PingFang SC;
+    }
+
+    .pmps {
+        font-family: PingFangSC-Medium, PingFang SC;
+    }
+
+    .fbf {
+        font-family: FinFont-Bold, FinFont;
+    }
+
+    .prps {
+        font-family: PingFangSC-Regular, PingFang SC;
+    }
+
+    /* 公用字体 end */
+</style>
+
+</html>

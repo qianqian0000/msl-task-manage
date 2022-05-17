@@ -1,17 +1,10 @@
 import MobileDetect from 'mobile-detect'
 export default {
     /**
-     * 获取请求URL参数值
-     * @return:
-     */
-    getParam(paramName) {
-        return decodeURIComponent((new RegExp('[?|&]' + paramName + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ['', ''])[1].replace(/\+/g, '%20')) || null
-    },
-    /**
      * 字符串是否为空
      * @return:
      */
-    isNull (data) {
+     isNull (data) {
         return data === '' || data === null || data === 'null' || data === 'undefined' || data === undefined
     },
     /**
@@ -24,6 +17,65 @@ export default {
         } else {
             return true
         }
+    },
+    /**
+     * 时间格式化
+     * @return:
+     */
+     dateFormat(fmt, date) {   
+        var o = {
+            "M+": date.getMonth() + 1, //月份   
+            "d+": date.getDate(), //日  
+            "H+": date.getHours(), //小时
+            "m+": date.getMinutes(), //分钟
+            "s+": date.getSeconds() //秒
+        };
+        if(/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for(var k in o)
+            if(new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    },
+    /**
+     * vant时间选择器 显示时间格式化
+     * @return:
+     */
+    formatter(type, val) {
+        if (type === 'year') {
+            return val + '年';
+        }
+        if (type === 'month') {
+            return val + '月';
+        }
+        if (type === 'day') {
+            return val + '日';
+        }
+        if (type === 'hour') {
+            return val + '时';
+        }
+        if (type === 'minute') {
+            return val + '分';
+        }
+        return val;
+    },
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 获取请求URL参数值
+     * @return:
+     */
+    getParam(paramName) {
+        return decodeURIComponent((new RegExp('[?|&]' + paramName + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ['', ''])[1].replace(/\+/g, '%20')) || null
     },
     /**
      * 获取设备信息
