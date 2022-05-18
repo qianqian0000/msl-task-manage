@@ -60,7 +60,7 @@ export default {
     }
   }
   .fadeOut-leave-active{
-    animation:modalToggle 5s reverse;
+    animation:modalToggle 2s reverse;
   }
   @keyframes modalToggle {
     0% {

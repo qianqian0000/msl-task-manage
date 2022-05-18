@@ -23,7 +23,7 @@
           v-model="taskRadioTemp"
           :value="item.id"
           name="item.id"
-          @click="changeRadio($event)"
+          @click="changeRadio(item)"
         />
       </div>
       <div :class="{'taskItem-select': item.children, 'taskItem-selectDir': item.show}" @click="getChildren(item)">
@@ -63,9 +63,9 @@ export default {
     getChildren(item){
       item.show = !item.show;
     },
-    async changeRadio(event,val){
-      console.log(event)
-      console.log(this.taskRadioTemp)
+    async changeRadio(val){
+      console.log(val)
+      sessionStorage.setItem('taskRadio', JSON.stringify(val))
     },
     // cleanchecked(event) {
     //   event.target.checked = false;//取消选中状态

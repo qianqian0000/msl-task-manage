@@ -1,28 +1,28 @@
 <template>
-<div class="addTask" v-if="addTaskShow">
-  <div class="addTask-content">
-    <div class="addTask-title">新建任务</div>
+<div class="addEditTask" v-if="addEditTaskShow">
+  <div class="addEditTask-content">
+    <div class="addEditTask-title">{{addEditTitle}}</div>
     <van-form @submit="onSubmit">
-      <div class="addTask-row">
+      <div class="addEditTask-row">
         <label>任务：<i>*</i></label>
         <span class="rowRig">
           <van-field
-            v-model="taskName"
+            v-model="taskItem.dec"
             rows="2"
             autosize
-            name="taskName"
+            name="taskItem.dec"
             type="textarea"
             placeholder="请输入任务"
             :rules="[{ required: true, message: '请输入任务' }]"
           />
         </span>
       </div>
-      <div class="addTask-row">
+      <div class="addEditTask-row">
         <label>执行人：<i>*</i></label>
         <vanFieldCheckbox
           placeholder="请选择执行人"
-          v-model="executor"
-          name="executor"
+          v-model="executorArray"
+          name="executorArray"
           :columns="executorList"
           label-width="100"
           :option="{label:'label',value:'value'}"
@@ -30,33 +30,42 @@
           @confirm="confirm"
         />
       </div>
-      <div class="addTask-row">
+      <div class="addEditTask-row">
         <label>开始时间：</label>
         <span class="rowRig">
           <van-field
-            v-model="startDate"
-            name="startDate"
+            v-model="taskItem.startTime"
+            name="taskItem.startTime"
             right-icon="clock-o"
             placeholder="开始时间"
             readonly
-            @click="choiceDate($event,'startDate')"
+            @click="choiceDate('startTime')"
           />
         </span>  
       </div>
       
-      <div class="addTask-row">
+      <div class="addEditTask-row">
         <label>完成时间：</label>
         <span class="rowRig">
           <van-field
-            v-model="endDate"
-            name="endDate"
+            v-model="taskItem.endTime"
+            name="taskItem.endTime"
             right-icon="underway-o"
             placeholder="开始时间"
             readonly
-            @click="choiceDate($event,'endDate')"
+            @click="choiceDate('endTime')"
           />
         </span>   
       </div>
+      <div class="addEditTask-row" v-if="progressShow" style="align-items: center;">
+        <label>进度：</label>
+        <span class="rowRig">
+          <!-- <van-progress :percentage="10" /> -->
+          <input type="range" v-model="progress" value="progress" min="1" max="100" @change="progressValue(taskItem.progress)">
+          <label>{{progress}}%</label>
+        </span>   
+      </div>
+      
       <div class="addBtn">
         <van-button round block type="info" native-type="submit">提交</van-button>
         <van-button round block type="default" @click="cancel">取消</van-button>
@@ -73,27 +82,35 @@
 <script>
 import vanFieldCheckbox from '@/components/vanFieldCheckbox'
 export default {
-  name: 'mainTask',
+  name: 'editTask',
   components: { 
     vanFieldCheckbox
   },
   data() {
     return {
-      addTaskShow: false,
-    
-      taskName: '', // 任务
-      startDate:"", //开始时间
-      endDate:"", //结束时间
+      addEditTaskShow: false,
+      addEditTitle: "新建",
+      taskItem: { // 任务内容
+        id: "",
+        dec: "",
+        startTime: "",
+        endTime: "",
+        executor: "",
+        progress: "",
+        show:false,
+      },
+      executorArray:[],//默认选中执行人 checkbox选中的value
+      progress: "", //进度，去掉百分号
+      progressShow:false,
 
-      executor: [], //默认选中执行人 checkbox选中的value
       executorList: [
-        {label:'执行人1', value:'1'},
-        {label:'执行人2', value:'2'},
-        {label:'执行人3', value:'3'},
-        {label:'执行人4', value:'4'},
-        {label:'执行人5', value:'5'},
-        {label:'执行人6', value:'6'},
-        {label:'执行人7', value:'7'}
+        {label:'执行人1', value:'执行人1'},
+        {label:'执行人2', value:'执行人2'},
+        {label:'执行人3', value:'执行人3'},
+        {label:'执行人4', value:'执行人4'},
+        {label:'执行人5', value:'执行人5'},
+        {label:'执行人6', value:'执行人6'},
+        {label:'执行人7', value:'执行人7'}
       ], 
 
       //时间选择器
@@ -107,7 +124,22 @@ export default {
 
     };
   },
+  mounted() {
+    
+  },
   methods: {
+    // 初始页面
+    isShow (val) {
+      if(val === 'edit') {
+        this.addEditTitle = "编辑"
+        this.taskItem = JSON.parse(sessionStorage.getItem('taskRadio'))
+        this.executorArray = this.taskItem.executor.split(/[,]/)
+        this.progress = this.taskItem.progress.replace('%','')
+        this.progressShow = true
+        console.log(this.taskItem.startTime)
+      }
+      this.addEditTaskShow = true
+    },
     // 多选
     confirm (data1, data2) { // select确定,
       // data1 是当前选中数据的value的数组
@@ -116,7 +148,7 @@ export default {
       this.value3 = data2
     },
     // 选择时间
-    choiceDate(e, type){
+    choiceDate(type){
 			this.showDate = true
       this.choiceStatus = type
 		},
@@ -124,33 +156,31 @@ export default {
     confirmDate(val){
 			this.showDate=false
       let choiceD = this.common.dateFormat("yyyy-MM-dd HH:mm:ss",val)
-      this.choiceStatus === 'startDate' ? this.startDate = choiceD : this.endDate = choiceD
+      this.choiceStatus === 'startTime' ? this.taskItem.startTime = choiceD : this.taskItem.endTime = choiceD
 			
 		},
     // 时间选择器 取消按钮
 		cancelDate() {
 			this.showDate=false
 		},
-
-
-    isShow () {
-      this.addTaskShow = true
-    },
+    //进度
+    progressValue(val){},
+    
     // 提交
     onSubmit(values) {
       console.log('submit', values)
-      this.addTaskShow = !this.addTaskShow
+      this.addEditTaskShow = !this.addEditTaskShow
     },
     // 取消
     cancel() {
-      this.addTaskShow = !this.addTaskShow
+      this.addEditTaskShow = !this.addEditTaskShow
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.addTask{
+.addEditTask{
   width: 100%;
   height: 100%;
   background:rgba(0,0,0,0.5);
@@ -158,7 +188,7 @@ export default {
   left: 0;
   top: 0;
   z-index: 99;
-  .addTask-content{
+  .addEditTask-content{
     margin: 0 auto;
     position: relative;
     top: 50%;
@@ -168,13 +198,14 @@ export default {
     padding:24px 16px;
     background: #fff;
     border-radius: 7px;
-    .addTask-title{
+    .addEditTask-title{
       font-size: 20px;
       font-weight: bold;
       padding:6px 0 12px;
     }
-    .addTask-row{
+    .addEditTask-row{
       display: flex;
+      position: relative;
       // align-items: center;
       padding: 4px 0;
       border-bottom: 1px solid #ccc;
@@ -190,6 +221,17 @@ export default {
         flex-grow: 1;
         .van-cell{
           font-size: 16px !important;
+        }
+        >input[type=range]{
+          background-color: #1989fa;
+          width: 80%;
+        }
+        label{
+          color: #1989fa;
+          display: inline-block;
+          position: absolute;
+          top: 47%;
+          transform: translateY(-50%);
         }
       }
     }

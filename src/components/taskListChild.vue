@@ -23,7 +23,7 @@
           v-model="taskRadioTemp"
           :value="item.id"
           name="item.id"
-          @change="changeRadio"
+          @change="changeRadio(item)"
         />
       </div>
       <div :class="{'taskItem-select': item.children, 'taskItem-selectDir': item.show}" @click="getChildren(item)">
@@ -62,9 +62,9 @@ export default {
     getChildren(item){
       item.show = !item.show;
     },
-    async changeRadio(event){
-      console.log(event)
-      console.log(this.taskRadioTemp)
+    async changeRadio(val){
+      console.log(val)
+      sessionStorage.setItem('taskRadio', JSON.stringify(val))
     }
   }
 

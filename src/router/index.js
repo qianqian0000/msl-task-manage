@@ -14,11 +14,6 @@ const routes = [
     name: 'taskList',
     component: () => import('@/views/taskList/Index.vue')
   },
-  {
-    path: '/taskTable',
-    name: 'taskTable',
-    component: () => import('@/views/taskList/taskTable.vue')
-  },
 ]
 
 const router = new VueRouter({

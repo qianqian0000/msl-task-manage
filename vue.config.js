@@ -1,11 +1,8 @@
 'use strict'
 const path = require('path')
 const defaultSettings = require('./src/config/index.js')
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const resolve = dir => path.join(__dirname, dir)
-//压缩代码并去掉console
-// const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 //引入gzip压缩组件
 const CompressionWebpackPlugin = require("compression-webpack-plugin")
 // page title
@@ -16,7 +13,6 @@ const type = process.env.VUE_APP_ENV
 
 module.exports = {
   publicPath: IS_PROD?' ./':'/', // 部署应用包时的基本 URL。 vue-router hash 模式使用
-  // outputDir: `dist-${type}`, //  生产环境构建文件的目录
   outputDir: `dist`, //  生产环境构建文件的目录
   assetsDir: 'static', //  outputDir的静态资源(js、css、img、fonts)目录
   lintOnSave: true,
@@ -27,8 +23,8 @@ module.exports = {
     disableHostCheck: true,
     overlay: {
     //  当出现编译器错误或警告时，在浏览器中显示全屏覆盖层
-    warnings: false,
-    errors: true,
+      warnings: false,
+      errors: true,
     },
     /*
     proxy: {
@@ -57,23 +53,6 @@ module.exports = {
   configureWebpack: config => {
     config.name = name
     const plugins = []
-    //启用代码压缩
-    /*
-    plugins.push(
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          compress: {
-            warnings: false,
-            drop_console: true,
-            drop_debugger: false,
-            pure_funcs: ["console.log"] //移除console
-          }
-        },
-        sourceMap: false,
-        parallel: true
-      })
-    ),
-    */
     //代码压缩打包
     plugins.push(new CompressionWebpackPlugin({
       algorithm: 'gzip',
@@ -82,11 +61,6 @@ module.exports = {
       minRatio: 0.8
     }));
     config.plugins = [...config.plugins, ...plugins];
-    // 为生产环境修改配置...
-    // if (IS_PROD) {
-    //   // externals
-    //   config.externals = externals
-    // }
   },
 
   chainWebpack: config => {
@@ -102,22 +76,7 @@ module.exports = {
       .set('api', resolve('src/api'))
       .set('views', resolve('src/views'))
       .set('components', resolve('src/components'))
-
-    /**
-     * 打包分析
-     */
-    /*
-    if (IS_PROD) {
-      config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
-        {
-          // analyzerMode: 'static'
-          analyzerMode: 'disabled'
-        }
-      ])
-    }
-    */
     config
-      // https://webpack.js.org/configuration/devtool/#development
       .when(!IS_PROD, config => config.devtool('cheap-source-map'))
 
     config.when(IS_PROD, config => {

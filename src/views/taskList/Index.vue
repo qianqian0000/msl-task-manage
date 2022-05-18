@@ -14,27 +14,24 @@
     </div>
   </div>
   <div class="buttonWrap">
-      <button @click="addTask">新增</button>
-      <button @click="ediTask">编辑</button>
+      <button @click="addEditTask('add')">新增</button>
+      <button @click="addEditTask('edit')">编辑</button>
       <button @click="delTask">删除</button>
   </div>
-  <addTask ref="addTask"></addTask>
-  <ediTask ref="ediTask"></ediTask>
+  <addEditTask ref="addEditTask"></addEditTask>
   <delTask ref="delTask"></delTask>
 </div>
 </template>
 
 <script>
 import taskList from '@/components/taskList'
-import addTask from '@/components/addTask'
-import ediTask from '@/components/ediTask'
+import addEditTask from '@/components/addEditTask'
 import delTask from '@/components/delTask'
 import { Dialog } from 'vant';
 export default {
   components: {
     taskList,
-    addTask,
-    ediTask,
+    addEditTask,
     delTask,
   },
   data() {
@@ -139,14 +136,10 @@ export default {
     }
   },
   computed: {
-    hasChildrenList: function() {
-      return this.menuList.filter((item) => {
-        return !item.children
-    })
-	}
+      
   },
   mounted() {
-    
+    sessionStorage.removeItem('taskRadio')
   },
   methods: {
     // 悬浮下载按钮
@@ -154,36 +147,30 @@ export default {
       this.downloadShow = !this.downloadShow
     },
 
-    // 新增
-    addTask(){
-      this.$refs.addTask.isShow();
-    },
-    // 编辑
-    ediTask(){
-      this.$refs.ediTask.isShow();
+    // 新增 编辑
+    addEditTask(val){
+      var taskChecked = sessionStorage.getItem('taskRadio')
+      if(val === 'edit' && this.common.isNull(taskChecked)) {
+        Dialog.alert({
+          title: '提示消息',
+          message: '请选择一条数据',
+        })
+      }else{
+        this.$refs.addEditTask.isShow(val);
+      }
+      
     },
     // 删除
     delTask(){
-      Dialog.confirm({
-        title: '提示消息',
-        message: '确认提交',
-      }).then(() => {
-          // on confirm
-      }).catch(() => {
-        // on cancel
-      });
-      // Dialog({ message: '提示' });
-      /*
-      Dialog.alert({
-        title: '提示消息',
-        message: '确认提交',
-      }).then(() => {
-        // on close
-      });
-      */
-      // this.$loading.show("加载中...")
-      //this.$toast.show('请选择任务')
-      // this.$refs.delTask.isShow();
+      var taskChecked = sessionStorage.getItem('taskRadio')
+      if(this.common.isNull(taskChecked)) {
+        Dialog.alert({
+          title: '提示消息',
+          message: '请选择一条数据',
+        })
+      }else{
+        this.$refs.delTask.isShow();
+      }
     },
   }
 };

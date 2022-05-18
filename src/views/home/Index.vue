@@ -34,50 +34,53 @@ export default {
   data() {
     return {
       noticeContent: "~~~醒醒~~~您有新任务啦~~~",
-        // 头部icon
-        taskTotal: [
-          {
-            value:"105",
-            name:'全部任务'
-          },
-          {
-            value:"30",
-            name:'我创建的'
-          },
-          {
-            value:"5",
-            name:'我的任务'
-          }
-        ],
-        mainTask: [
-          { 
-            value: "全部任务",
-            icon: "0",
-            children:[
-              {value: "全部任务1"},
-              {value: "全部任务2"},
-              {value: "全部任务3"}
-            ]
-          },
-          { 
-            value: "我的创建",
-            icon: "1",
-            children:[
-              {value: "我的创建1"},
-              {value: "我的创建2"},
-              {value: "我的创建3"}
-            ]
-          },
-          { 
-            value: "我的任务",
-            icon: "2",
-            children:[
-              {value: "我的任务1"},
-              {value: "我的任务2"},
-              {value: "我的任务3"}
-            ]
-          },
-        ]
+      operator: {
+        operatorRole: "admin",// admin，query，normal
+        operatorName: "张三" 
+      },
+      // 头部icon
+      taskTotal: [
+        {
+          value:"105",
+          name:'全部任务'
+        },
+        {
+          value:"30",
+          name:'我创建的'
+        },
+        {
+          value:"5",
+          name:'我的任务'
+        }
+      ],
+      mainTask: [
+        { 
+          value: "全部任务",
+          icon: "0",
+          children:[
+            {value: "全部任务1"},
+            {value: "全部任务2"},
+            {value: "全部任务3"}
+          ]
+        },
+        { 
+          value: "我的创建",
+          icon: "1",
+          children:[
+            {value: "我的创建1"},
+            {value: "我的创建2"},
+            {value: "我的创建3"}
+          ]
+        },
+        { 
+          value: "我的任务",
+          icon: "2",
+          children:[
+            {value: "我的任务1"},
+            {value: "我的任务2"},
+            {value: "我的任务3"}
+          ]
+        }]
      };
   },
   computed: {
@@ -87,7 +90,27 @@ export default {
     
   },
   methods: {
-    viewTask(){},
+    viewTask(){
+      // this.$toast.show('请选择任务') //toast提示
+      // this.$loading.show("加载中...") //loading，文字可替换或者不显示
+      /*
+        Dialog.alert({ //消息提示弹框
+          title: '提示消息',
+          message: '确认提交',
+        }).then(() => {
+          // on close
+        });
+      */
+      Dialog.confirm({
+        title: '提示消息',
+        message: '确认提交',
+      }).then(() => {
+          // on confirm
+      }).catch(() => {
+        // on cancel
+      });
+    },
+    
   }
 };
 </script>

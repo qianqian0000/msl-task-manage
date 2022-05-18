@@ -5,7 +5,7 @@
     <div class="delTask-form">
       <div class="delTask-point">
         此操作将删除任务及全部子任务，无法恢复！请输入
-        <span>{{taskName}}</span>确认删除操作
+        <span>{{taskItem.dec}}</span>确认删除操作
       </div>
       <div class="delTask-input">
         <input type="text" v-model="inputTask">
@@ -32,18 +32,31 @@ export default {
   data() {
     return {
       delTaskShow: false,
-
-      taskName: "总体任务1",
+      taskItem: { // 任务内容
+        id: "",
+        dec: "",
+        startTime: "",
+        endTime: "",
+        executor: "",
+        progress: "",
+        show:false,
+      },
       inputTask: "",
     };
   },
   methods: {
     isShow () {
+      this.taskItem = JSON.parse(sessionStorage.getItem('taskRadio'))
       this.delTaskShow = true
     },
     // 提交
     submit() {
-      this.delTaskShow = !this.delTaskShow
+      console.log(this.inputTask)
+      if(this.inputTask !== this.taskItem.dec){
+        this.$toast.show('请输入任务名，确认删除')
+      }else{
+        this.delTaskShow = !this.delTaskShow
+      }   
     },
     // 取消
     cancel() {
