@@ -23,7 +23,7 @@
           v-model="taskRadioTemp"
           :value="item.id"
           name="item.id"
-          @change="changeRadio"
+          @click="changeRadio($event)"
         />
       </div>
       <div :class="{'taskItem-select': item.children, 'taskItem-selectDir': item.show}" @click="getChildren(item)">
@@ -33,34 +33,6 @@
     <div v-if="item.children" :key="index+'b'" v-show="item.show">
       <taskListChild :taskListChild="item.children" :taskRadio="taskRadioTemp"/>
     </div>
-    <!-- <div v-if="item.children" :key="index">
-      <template  v-for="(item,i) in item.children">
-        <div class="taskItem" :key="i">
-          <div class="taskItem-title">
-              {{item.dec}}
-          </div>
-          <div class="taskItem-row">
-              开始时间: {{item.startTime}}
-          </div>
-          <div class="taskItem-row">
-              完成时间: {{item.endTime}}
-          </div>
-          <div class="taskItem-row">
-              执行人: {{item.executor}}
-          </div>
-          <div class="taskItem-row">
-              进度: {{item.progress}}
-          </div>
-          <div class="taskItem-radio">
-            <van-radio-group v-model="radio">
-              <van-radio name="1"></van-radio>
-            </van-radio-group>
-          </div>
-          <div :class="{'taskItem-select': item.children}" @click="getChildren(item)"></div>    
-        </div>
-      </template>
-    </div> -->
-  
   </template>
 </div>
 </template>
@@ -91,10 +63,14 @@ export default {
     getChildren(item){
       item.show = !item.show;
     },
-    async changeRadio(event){
+    async changeRadio(event,val){
       console.log(event)
       console.log(this.taskRadioTemp)
-    }
+    },
+    // cleanchecked(event) {
+    //   event.target.checked = false;//取消选中状态
+    // },
+    
   }
 
 }
@@ -117,6 +93,25 @@ export default {
       width: 22px;
       height: 22px;
       border:1px solid #000;
+    }
+    input[type=radio]:after {
+      position: absolute;
+      width: 19px;
+      height: 21px;
+      top: 0px;
+      left: 6px;
+      content: " ";
+      color: #fff;
+      display: inline-block;
+      visibility: visible;
+      padding-left: 3px;
+      padding-top: 1px;
+      border-radius: 50%;
+	  }
+    input[type=radio]:checked:after {
+      content: "\2713";
+      // background: url("../assets/images/icon/checked.png");
+      background: #1989fa;
     }
   }
   .taskItem-title{

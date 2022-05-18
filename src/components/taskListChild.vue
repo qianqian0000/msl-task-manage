@@ -89,6 +89,25 @@ export default {
       height: 22px;
       border:1px solid #000;
     }
+    input[type=radio]:after {
+      position: absolute;
+      width: 19px;
+      height: 21px;
+      top: 0px;
+      left: 6px;
+      content: " ";
+      color: #fff;
+      display: inline-block;
+      visibility: visible;
+      padding-left: 3px;
+      padding-top: 1px;
+      border-radius: 50%;
+	  }
+    input[type=radio]:checked:after {
+      content: "\2713";
+      // background: url("../assets/images/icon/checked.png");
+      background: #1989fa;
+    }
   }
   .taskItem-title{
     font-size: 18px;
