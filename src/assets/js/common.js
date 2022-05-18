@@ -61,22 +61,6 @@ export default {
     },
 
 
-
-
-
-
-
-
-
-
-
-    /**
-     * 获取请求URL参数值
-     * @return:
-     */
-    getParam(paramName) {
-        return decodeURIComponent((new RegExp('[?|&]' + paramName + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ['', ''])[1].replace(/\+/g, '%20')) || null
-    },
     /**
      * 获取设备信息
      * @returns 
