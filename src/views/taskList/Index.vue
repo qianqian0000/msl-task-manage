@@ -9,28 +9,39 @@
   <div class="susBtn">
     <img src="~@/assets/images/icon/download1.png" @click="getDownload">
     <div class="downloadBtn" v-show="downloadShow">
-      <span>Mpp</span>
-      <span>XLSX</span>
+      <button>Mpp</button>
+      <button>XLSX</button>
     </div>
   </div>
   <div class="buttonWrap">
-      <span>新增</span>
-      <span>编辑</span>
-      <span>删除</span>
+      <button @click="addTask">新增</button>
+      <button @click="ediTask">编辑</button>
+      <button @click="delTask">删除</button>
   </div>
+  <addTask ref="addTask"></addTask>
+  <ediTask ref="ediTask"></ediTask>
+  <delTask ref="delTask"></delTask>
 </div>
 </template>
 
 <script>
 import taskList from '@/components/taskList'
+import addTask from '@/components/addTask'
+import ediTask from '@/components/ediTask'
+import delTask from '@/components/delTask'
+import { Dialog } from 'vant';
 export default {
   components: {
     taskList,
+    addTask,
+    ediTask,
+    delTask,
   },
   data() {
     return {
-      taskRadio: '',
-      downloadShow: false,
+      taskRadio: '', //单选框
+      downloadShow: false, //悬浮下载按钮
+      addTaskShow: false, //新建任务
       taskList: [
         {
           id: "1",
@@ -138,9 +149,42 @@ export default {
     
   },
   methods: {
+    // 悬浮下载按钮
     getDownload(){
       this.downloadShow = !this.downloadShow
-    }
+    },
+
+    // 新增
+    addTask(){
+      this.$refs.addTask.isShow();
+    },
+    // 编辑
+    ediTask(){
+      this.$refs.ediTask.isShow();
+    },
+    // 删除
+    delTask(){
+      Dialog.confirm({
+        title: '提示消息',
+        message: '确认提交',
+      }).then(() => {
+          // on confirm
+      }).catch(() => {
+        // on cancel
+      });
+      // Dialog({ message: '提示' });
+      /*
+      Dialog.alert({
+        title: '提示消息',
+        message: '确认提交',
+      }).then(() => {
+        // on close
+      });
+      */
+      // this.$loading.show("加载中...")
+      //this.$toast.show('请选择任务')
+      // this.$refs.delTask.isShow();
+    },
   }
 };
 </script>
@@ -177,9 +221,10 @@ export default {
     }
     .downloadBtn{
       padding-right: 12px;
-      span{
+      button{
         display:inline-block;
         flex:1;
+        background:#fff;
         line-height: 24px;
         border-radius:7px;
         text-align: center;
@@ -198,7 +243,7 @@ export default {
     background:#fff;
     width:100%;
     display: flex;
-    span{
+    button{
       display:inline-block;
       flex:1;
       padding:10px 0;
@@ -208,15 +253,16 @@ export default {
       border-radius:7px;
       text-align: center;
       margin-left:4%;
+      border: none;
     }
-    span:nth-child(1){
+    button:nth-child(1){
       background: #B1B1B1;
       margin-left:0;
     }
-    span:nth-child(2){
+    button:nth-child(2){
       background: linear-gradient(77deg, #116FE1 0%, #4B91E6 100%);
     }
-    span:nth-child(3){
+    button:nth-child(3){
       background: linear-gradient(77deg, #d81e06 0%, #ec462e 100%);
     }
   }

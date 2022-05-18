@@ -53,14 +53,14 @@ export default {
       font-size: 16px;
       line-height: 22px;
       text-align: center;
-      background-color: rgba(54,56,77,0.9);
+      background-color: rgba(0,0,0,.7);
       color: #fff;
-      border-radius: 5px;
-      padding: 12px 14px;
+      border-radius: 7px;
+      padding: 12px 20px;
     }
   }
   .fadeOut-leave-active{
-    animation:modalToggle 1s reverse;
+    animation:modalToggle 5s reverse;
   }
   @keyframes modalToggle {
     0% {

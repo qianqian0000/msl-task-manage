@@ -18,6 +18,7 @@ import './assets/fonts/iconfont.css'
 import Vant from 'vant'
 import 'vant/lib/index.css';
 import './assets/css/common.css';
+
 Vue.use(Vant)
 
 Vue.use(VueX)

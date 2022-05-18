@@ -10,13 +10,13 @@
             :key="index">
             <iconBtn :value="item.value"
               :name="item.name"
-              @on-click="jumpPage(item)"/>
+              @click="viewTask(item)"/>
           </div>
       </div>
     </div>
   </div>
 
-  <mainTask :mainTask="mainTask" @on-click="jumpPage(item)"/>
+  <mainTask :mainTask="mainTask"/>
 
 </div>
 </template>
@@ -87,7 +87,7 @@ export default {
     
   },
   methods: {
-    jumpPage(){},
+    viewTask(){},
   }
 };
 </script>

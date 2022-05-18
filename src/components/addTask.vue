@@ -1,5 +1,5 @@
 <template>
-<div class="addTask">
+<div class="addTask" v-if="addTaskShow">
   <div class="addTask-content">
     <div class="addTask-title">新建任务</div>
     <van-form @submit="onSubmit">
@@ -59,7 +59,7 @@
       </div>
       <div class="addBtn">
         <van-button round block type="info" native-type="submit">提交</van-button>
-        <van-button round block type="default" native-type="submit">取消</van-button>
+        <van-button round block type="default" @click="cancel">取消</van-button>
       </div>
         
     </van-form>
@@ -73,11 +73,14 @@
 <script>
 import vanFieldCheckbox from '@/components/vanFieldCheckbox'
 export default {
+  name: 'mainTask',
   components: { 
     vanFieldCheckbox
   },
   data() {
     return {
+      addTaskShow: false,
+    
       taskName: '', // 任务
       startDate:"", //开始时间
       endDate:"", //结束时间
@@ -129,9 +132,18 @@ export default {
 			this.showDate=false
 		},
 
+
+    isShow () {
+      this.addTaskShow = true
+    },
     // 提交
     onSubmit(values) {
-      console.log('submit', values);
+      console.log('submit', values)
+      this.addTaskShow = !this.addTaskShow
+    },
+    // 取消
+    cancel() {
+      this.addTaskShow = !this.addTaskShow
     },
   },
 };

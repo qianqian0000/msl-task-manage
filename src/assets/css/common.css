@@ -34,6 +34,20 @@ input,textarea{
     font-weight: 400;
     color: #3D8BFF;
 }
+.van-dialog__message{
+    font-size: 16px;
+    line-height: 24px;
+}
+.van-dialog {
+    font-size: 18px;
+}
+.van-dialog__content{
+    padding: 16px 0px;
+}
+.van-dialog__cancel, .van-dialog__confirm {
+    height: 52px;
+    font-size: 20px;
+}
 /*
 .van-picker__title{
     font-size: 0.36rem;

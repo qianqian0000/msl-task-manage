@@ -7,7 +7,7 @@
         <img v-if="item.icon == '2'" src="~@/assets/images/icon/my.png" >
         <span class="taskBlock-name">{{item.value}}</span>
         <span class="taskBlock-note">（显示最近三条）</span>
-        <p class="taskBlock-btn" @click="$emit('on-click')">查看更多</p>
+        <p class="taskBlock-btn" @click="more(item.value)">查看更多</p>
       </div>
       <div class="taskBlock-li"
               v-for="(item, index) in item.children"
@@ -26,6 +26,14 @@ export default {
       default: ''
     }
   },
+  methods: {
+    more(data) {
+      console.log(data)
+      if(data === '全部任务') this.$router.push('/taskList')
+      if(data === '我的创建') this.$router.push('/taskList')
+      if(data === '我的任务') this.$router.push('/taskList')
+    }
+  }
 }
 </script>
 
