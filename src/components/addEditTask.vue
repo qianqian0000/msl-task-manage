@@ -67,8 +67,8 @@
       </div>
       
       <div class="addBtn">
-        <van-button round block type="info" native-type="submit">提交</van-button>
         <van-button round block type="default" @click="cancel">取消</van-button>
+        <van-button round block type="info" native-type="submit">提交</van-button>
       </div>
         
     </van-form>
@@ -209,7 +209,7 @@ export default {
     top: 50%;
     width: 92%;
     transform:translateY(-50%);
-    overflow: auto;
+    overflow-x: hidden;
     padding:24px 16px;
     background: #fff;
     border-radius: 7px;
@@ -249,6 +249,7 @@ export default {
           position: absolute;
           top: 47%;
           transform: translateY(-50%);
+          width: 20%;
         }
       }
     }
@@ -261,7 +262,7 @@ export default {
         border-radius: 7px;
         font-size: 18px;
       }
-      button:nth-child(2){
+      button:nth-child(1){
         background: #ccc;
       }
     }

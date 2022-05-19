@@ -13,8 +13,8 @@
     </div>
 
     <div class="delBtn">
-      <van-button round block type="info" @click="submit">删除</van-button>
       <van-button round block type="default" @click="cancel">取消</van-button>
+      <van-button round block type="info" @click="submit">删除</van-button>
     </div>
         
   </div>
@@ -118,11 +118,11 @@ export default {
         border: none;
       }
       button:nth-child(1){
-        background: #ec462e;
-      }
-      button:nth-child(2){
         background: #ccc;
       }
+      button:nth-child(2){
+        background: #ec462e;
+      } 
     }
   }
 }
