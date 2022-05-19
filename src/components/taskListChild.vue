@@ -46,7 +46,7 @@ export default {
   props: {
     taskListChild: {
       type: Array,
-      default: ''
+      default: () => [],
     },
     taskRadio: {
       type: String,
@@ -102,7 +102,7 @@ export default {
       padding-left: 3px;
       padding-top: 1px;
       border-radius: 50%;
-	  }
+    }
     input[type=radio]:checked:after {
       content: "\2713";
       // background: url("../assets/images/icon/checked.png");

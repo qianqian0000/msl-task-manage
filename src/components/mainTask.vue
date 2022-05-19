@@ -23,7 +23,7 @@ export default {
   props: {
     mainTask: {
       type: Array,
-      default: ''
+      default: () => [],
     }
   },
   methods: {

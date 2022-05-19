@@ -154,7 +154,7 @@ export default {
       this.$emit('click', item)
       this.$refs.checkboxes[index].toggle()
     },
-    toggleAll (all) { // 全选
+    toggleAll () { // 全选
       this.unCheckedAll = false
       this.checkboxValue = this.checkboxValue.filter(item => item != '00')
       this.$refs.checkboxGroup.toggleAll(this.checkedAll)
