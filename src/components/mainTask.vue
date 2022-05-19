@@ -29,9 +29,9 @@ export default {
   methods: {
     more(data) {
       console.log(data)
-      if(data === '全部任务') this.$router.push('/taskList')
-      if(data === '我的创建') this.$router.push('/taskList')
-      if(data === '我的任务') this.$router.push('/taskList')
+      if(data === '全部任务') this.$router.push('/taskList?type=all')
+      if(data === '我的创建') this.$router.push('/taskList?type=create')
+      if(data === '我的任务') this.$router.push('/taskList?type=my')
     }
   }
 }

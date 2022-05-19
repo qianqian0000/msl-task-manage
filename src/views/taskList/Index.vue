@@ -1,7 +1,7 @@
 <template>
 <div class="task">
   <div class="taskContent">
-    <div class="taskTitle">全部任务</div>
+    <div class="taskTitle">{{taskListTile}}</div>
     <div class="taskTable">
       <taskList :taskList="taskList" :taskRadio="taskRadio"/>
     </div>
@@ -36,7 +36,8 @@ export default {
   },
   data() {
     return {
-      taskRadio: '', //单选框
+      taskListTile: "",
+      taskRadio: "", //单选框
       downloadShow: false, //悬浮下载按钮
       addTaskShow: false, //新建任务
       taskList: [
@@ -140,6 +141,10 @@ export default {
   },
   mounted() {
     sessionStorage.removeItem('taskRadio')
+    var type = this.common.getParam('type')
+    if(type === 'all') this.taskListTile = "全部任务"
+    if(type === 'create') this.taskListTile = "我的创建"
+    if(type === 'my') this.taskListTile = "我的任务"
   },
   methods: {
     // 悬浮下载按钮

@@ -89,7 +89,7 @@ export default {
   data() {
     return {
       addEditTaskShow: false,
-      addEditTitle: "新建",
+      addEditTitle: "新建任务",
       taskItem: { // 任务内容
         id: "",
         dec: "",
@@ -131,12 +131,14 @@ export default {
     // 初始页面
     isShow (val) {
       if(val === 'edit') {
-        this.addEditTitle = "编辑"
+        this.addEditTitle = "编辑任务"
         this.taskItem = JSON.parse(sessionStorage.getItem('taskRadio'))
         this.executorArray = this.taskItem.executor.split(/[,]/)
         this.progress = this.taskItem.progress.replace('%','')
         this.progressShow = true
         console.log(this.taskItem.startTime)
+      }else{
+        this.addEditTitle = "新建任务"
       }
       this.addEditTaskShow = true
     },
