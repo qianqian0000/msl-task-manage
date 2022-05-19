@@ -25,6 +25,7 @@
 import noticeBar from '@/components/noticeBar'
 import iconBtn from '@/components/iconBtn'
 import mainTask from '@/components/mainTask'
+import { Dialog } from 'vant';
 export default {
   components: {
     noticeBar,

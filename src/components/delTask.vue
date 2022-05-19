@@ -23,12 +23,8 @@
 </template>
 
 <script>
-import vanFieldCheckbox from '@/components/vanFieldCheckbox'
 export default {
   name: 'delTask',
-  components: { 
-    vanFieldCheckbox
-  },
   data() {
     return {
       delTaskShow: false,

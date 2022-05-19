@@ -166,7 +166,9 @@ export default {
 			this.showDate=false
 		},
     //进度
-    progressValue(val){},
+    progressValue(val){
+      console.log(val)
+    },
     
     // 提交
     onSubmit(values) {
