@@ -66,6 +66,21 @@ export default {
         }
         return val;
     },
+    /**
+     * 比较时间大小
+     * @returns 
+     */
+    compareDate(date1,date2){
+        var oDate1 = new Date(date1);
+        var oDate2 = new Date(date2);
+        if(oDate1.getTime() > oDate2.getTime()){
+            return true; //第一个大
+        } else {
+            return false; //第二个大
+        }
+    },
+
+
 
 
     /**

@@ -51,7 +51,7 @@
             v-model="taskItem.endTime"
             name="taskItem.endTime"
             right-icon="underway-o"
-            placeholder="开始时间"
+            placeholder="完成时间"
             readonly
             @click="choiceDate('endTime')"
           />
@@ -81,6 +81,7 @@
 
 <script>
 import vanFieldCheckbox from '@/components/vanFieldCheckbox'
+import { ContactList } from 'vant';
 export default {
   name: 'editTask',
   components: { 
@@ -169,7 +170,20 @@ export default {
     confirmDate(val){
 			this.showDate=false
       let choiceD = this.common.dateFormat("yyyy-MM-dd HH:mm:ss",val)
-      this.choiceStatus === 'startTime' ? this.taskItem.startTime = choiceD : this.taskItem.endTime = choiceD
+      if(this.choiceStatus === 'startTime'){
+        if(this.common.isNotNull(this.taskItem.endTime) && this.common.compareDate(choiceD,this.taskItem.endTime)) {
+          this.$toast.show("开始时间不能大于完成时间") 
+          return
+        }
+        this.taskItem.startTime = choiceD
+      }
+      if(this.choiceStatus === 'endTime'){
+        if(this.common.isNotNull(this.taskItem.startTime) && this.common.compareDate(this.taskItem.startTime,choiceD)) {
+          this.$toast.show("开始时间不能大于完成时间")
+          return
+        }
+        this.taskItem.endTime = choiceD
+      }
 			
 		},
     // 时间选择器 取消按钮
