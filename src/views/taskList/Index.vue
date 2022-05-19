@@ -6,9 +6,9 @@
       <taskList :taskList="taskList" :taskRadio="taskRadio"/>
     </div>
   </div>
-  <div class="susBtn">
+  <div class="susBtn" v-if="downloadShow">
     <img src="~@/assets/images/icon/download1.png" @click="getDownload">
-    <div class="downloadBtn" v-show="downloadShow">
+    <div class="downloadBtn" v-show="MppXlslShow">
       <button>Mpp</button>
       <button>XLSX</button>
     </div>
@@ -38,7 +38,8 @@ export default {
     return {
       taskListTile: "",
       taskRadio: "", //单选框
-      downloadShow: false, //悬浮下载按钮
+      downloadShow: false,
+      MppXlslShow: false, //悬浮下载按钮
       addTaskShow: false, //新建任务
       taskList: [
         {
@@ -142,14 +143,17 @@ export default {
   mounted() {
     sessionStorage.removeItem('taskRadio')
     var type = this.common.getParam('type')
-    if(type === 'all') this.taskListTile = "全部任务"
+    if(type === 'all') {
+      this.taskListTile = "全部任务"
+      this.downloadShow =true
+    }
     if(type === 'create') this.taskListTile = "我的创建"
     if(type === 'my') this.taskListTile = "我的任务"
   },
   methods: {
     // 悬浮下载按钮
     getDownload(){
-      this.downloadShow = !this.downloadShow
+      this.MppXlslShow = !this.MppXlslShow
     },
 
     // 新增 编辑
