@@ -34,19 +34,33 @@ input,textarea{
     font-weight: 400;
     color: #3D8BFF;
 }
-.van-dialog__message{
-    font-size: 16px;
-    line-height: 24px;
-}
+
 .van-dialog {
-    font-size: 18px;
+    font-size: 20px;
 }
 .van-dialog__content{
     padding: 16px 0px;
 }
+.van-dialog__message{
+    font-size: 18px;
+    line-height: 24px;
+}
 .van-dialog__cancel, .van-dialog__confirm {
-    height: 52px;
+    height: 48px;
     font-size: 20px;
+    border-radius: 7px;
+}
+.van-dialog .van-dialog__confirm{
+    background: #1989fa;
+    color: #ffffff;
+}
+.van-dialog .van-dialog__cancel{
+    background: #cccccc;
+    margin-right: 20px;
+}
+.van-dialog__footer {
+    width: 76%;
+    margin: 0 auto 20px;
 }
 /*
 .van-picker__title{

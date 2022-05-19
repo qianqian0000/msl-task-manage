@@ -160,10 +160,18 @@ export default {
     addEditTask(val){
       var taskChecked = sessionStorage.getItem('taskRadio')
       if(val === 'edit' && this.common.isNull(taskChecked)) {
-        Dialog.alert({
-          title: '提示消息',
-          message: '请选择一条数据',
-        })
+        // Dialog.alert({
+        //   title: '提示消息',
+        //   message: '请选择一条数据',
+        // })
+        Dialog.confirm({
+        title: '提示消息',
+        message: '确认提交',
+      }).then(() => {
+          // on confirm
+      }).catch(() => {
+        // on cancel
+      });
       }else{
         this.$refs.addEditTask.isShow(val);
       }

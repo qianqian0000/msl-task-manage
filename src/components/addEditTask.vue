@@ -4,7 +4,7 @@
     <div class="addEditTask-title">{{addEditTitle}}</div>
     <van-form @submit="onSubmit">
       <div class="addEditTask-row">
-        <label>任务：<i>*</i></label>
+        <label><i>*</i>任务：</label>
         <span class="rowRig">
           <van-field
             v-model="taskItem.dec"
@@ -18,7 +18,7 @@
         </span>
       </div>
       <div class="addEditTask-row">
-        <label>执行人：<i>*</i></label>
+        <label><i>*</i>执行人：</label>
         <vanFieldCheckbox
           placeholder="请选择执行人"
           v-model="executorArray"
@@ -223,17 +223,19 @@ export default {
       padding: 4px 0;
       border-bottom: 1px solid #ccc;
       label{
-        width:100px;
+        width:105px;
         padding: 10px 0;
         color: #333;
         i{
           color: #d81e06;
+          margin-right:4px;
         }
       }
       .rowRig{
         flex-grow: 1;
         .van-cell{
           font-size: 16px !important;
+          padding: 10px 0 !important;
         }
         >input[type=range]{
           background-color: #1989fa;

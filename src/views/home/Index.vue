@@ -1,7 +1,7 @@
 <template>
 <div class="home">
   <div class="header">
-    <noticeBar :noticeContent="noticeContent" />
+    <!-- <noticeBar :noticeContent="noticeContent" /> -->
     <div class="task-overview">
       <p>任务概览</p>
       <div class="iconList">
@@ -22,13 +22,13 @@
 </template>
 
 <script>
-import noticeBar from '@/components/noticeBar'
+// import noticeBar from '@/components/noticeBar'
 import iconBtn from '@/components/iconBtn'
 import mainTask from '@/components/mainTask'
 import { Dialog } from 'vant';
 export default {
   components: {
-    noticeBar,
+    // noticeBar,
     iconBtn,
     mainTask,
   },
