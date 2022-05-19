@@ -136,9 +136,18 @@ export default {
         this.executorArray = this.taskItem.executor.split(/[,]/)
         this.progress = this.taskItem.progress.replace('%','')
         this.progressShow = true
-        console.log(this.taskItem.startTime)
       }else{
         this.addEditTitle = "新建任务"
+        this.taskItem = {
+          id: "",
+          dec: "",
+          startTime: "",
+          endTime: "",
+          executor: "",
+          progress: "",
+          show:false,
+        }
+        this.executorArray = this.taskItem.executor.split(/[,]/)
       }
       this.addEditTaskShow = true
     },
