@@ -110,7 +110,8 @@ export default {
         {label:'执行人4', value:'执行人4'},
         {label:'执行人5', value:'执行人5'},
         {label:'执行人6', value:'执行人6'},
-        {label:'执行人7', value:'执行人7'}
+        {label:'执行人7', value:'执行人7'},
+        {label:'执行人11', value:'执行人11'}
       ], 
 
       //时间选择器
@@ -133,7 +134,7 @@ export default {
       if(val === 'edit') {
         this.addEditTitle = "编辑任务"
         this.taskItem = JSON.parse(sessionStorage.getItem('taskRadio'))
-        this.executorArray = this.taskItem.executor.split(/[,]/)
+        this.executorArray = this.taskItem.executor.split(/[, ，]/)
         this.progress = this.taskItem.progress.replace('%','')
         this.progressShow = true
       }else{
@@ -143,11 +144,12 @@ export default {
           dec: "",
           startTime: "",
           endTime: "",
+          creator: "",
           executor: "",
           progress: "",
           show:false,
         }
-        this.executorArray = this.taskItem.executor.split(/[,]/)
+        this.executorArray = this.taskItem.executor.split(/[, ，]/)
       }
       this.addEditTaskShow = true
     },

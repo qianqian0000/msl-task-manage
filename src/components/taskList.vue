@@ -5,14 +5,17 @@
       <div class="taskItem-title">
           {{item.dec}}
       </div>
+      <div class="taskItem-row" v-if="creatorShow">
+          创建人: {{item.creator}}
+      </div>
+      <div class="taskItem-row" v-if="executorShow">
+          执行人: {{item.executor}}
+      </div>
       <div class="taskItem-row">
           开始时间: {{item.startTime}}
       </div>
       <div class="taskItem-row">
           完成时间: {{item.endTime}}
-      </div>
-      <div class="taskItem-row">
-          执行人: {{item.executor}}
       </div>
       <div class="taskItem-row">
           进度: {{item.progress}}
@@ -56,7 +59,9 @@ export default {
   },
   data() {
     return {
-       taskRadioTemp:"",
+       taskRadioTemp: "",
+       creatorShow: true,// 创建人，我的创建不展示该信息
+      executorShow: true,// 执行人，我的任务不展示该信息
     }
   },
   methods: {
