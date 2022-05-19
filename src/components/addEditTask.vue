@@ -81,7 +81,6 @@
 
 <script>
 import vanFieldCheckbox from '@/components/vanFieldCheckbox'
-import { ContactList } from 'vant';
 export default {
   name: 'editTask',
   components: { 
