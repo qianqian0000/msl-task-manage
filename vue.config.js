@@ -30,8 +30,7 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-          target: 'https://tsam-sit.internal.manulife-sinochem.com',
-          // ws:true,
+          target: '',
           changOrigin:true,
           pathRewrite:{
             '^/api':'/api'
