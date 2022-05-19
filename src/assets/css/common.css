@@ -46,7 +46,7 @@ input,textarea{
     line-height: 24px;
 }
 .van-dialog__cancel, .van-dialog__confirm {
-    height: 48px;
+    height: 44px;
     font-size: 20px;
     border-radius: 7px;
 }
@@ -56,10 +56,10 @@ input,textarea{
 }
 .van-dialog .van-dialog__cancel{
     background: #cccccc;
-    margin-right: 20px;
+    margin-right: 40px;
 }
 .van-dialog__footer {
-    width: 76%;
+    width: 70%;
     margin: 0 auto 20px;
 }
 /*
