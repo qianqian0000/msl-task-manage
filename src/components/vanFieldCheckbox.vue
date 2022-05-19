@@ -211,8 +211,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dh-field {
-    padding: 0 16px;background:#fff;
+  ::v-deep.dh-field {
+    padding: 0 16px;
+    background:#fff;
+    width: 100%;
     .dh-cell.van-cell{padding: 10px 0;}
     .dh-cell.van-cell--required::before{left: -8px;}
     .van-popup{border-radius: 3px;}
